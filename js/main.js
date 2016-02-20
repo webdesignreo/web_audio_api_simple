@@ -9,34 +9,29 @@ $(document).ready(function () {
   audioHelper.loadAudioBuffer = function(audioContext, url){
       console.log(AudioContext.decodeAudioData, '>>>AudioContext.decodeAudioData>>>');
       console.log(audioContext.decodeAudioData, '>>>audioContext.decodeAudioData>>>');
-      var AudioFile;
-      var cb;
-      var _decodeAudioData = function(audioFile, cb, Audiofile){
+      var _decodeAudioData = function(audioFile, cb){
               //AudioContext.decodeAudioData
               console.log(AudioContext, '>>>>AudioContext>>>>');
               console.log(audioContext, '>>>>audioContext>>>>');
               console.log(audioFile, '>>>>audioFile>>>>');
               //.decodeAudioData
               //decodeAudioData
-              AudioFile = audioFile;
-              return AudioFile;
-              return cb;
+              audioContext.decodeAudioData(
+                  audioFile,
+                  //success callback
+                  function(buffer) {
+                      if (!buffer) {
+                          alert('error decoding file data: ' + url);
+                          return;
+                      }
+                      cb(buffer);
+                  },
+                  //error callback
+                  function(error) {
+                      alert('decodeAudioData error', error);
+                  }
+              );
       }
-      audioContext.decodeAudioData(
-          AudioFile,
-          //success callback
-          function(buffer) {
-              if (!buffer) {
-                  alert('error decoding file data: ' + url);
-                  return;
-              }
-              cb(buffer);
-          },
-          //error callback
-          function(error) {
-              alert('decodeAudioData error', error);
-          }
-      );
       var _requestFile = function(cb){
           var _xhr = new XMLHttpRequest();
           _xhr.open("GET", url, true);

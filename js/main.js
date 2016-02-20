@@ -8,50 +8,29 @@ $(document).ready(function () {
   //decodeAudioData() メソッドでデータ形式を変更
   window.AudioHelper = function(){}
   var audioHelper = new AudioHelper(audioContext);
+  var arrayBuffer;
   audioHelper.loadAudioBuffer = function(audioContext, url){
       console.log(AudioContext.decodeAudioData, '>>>AudioContext.decodeAudioData>>>');
       console.log(audioContext.decodeAudioData, '>>>audioContext.decodeAudioData>>>');
-      var DecodeAudioFile, DecodeCb;
-      var _decodeAudioDataBefore = function(audioFile, cb){
-              //AudioContext.decodeAudioData
-              console.log(AudioContext, '>>>>AudioContext>>>>');
-              console.log(audioContext, '>>>>audioContext>>>>');
-              console.log(audioFile, '>>>>audioFile>>>>');
-              //.decodeAudioData
-              //decodeAudioData
-              DecodeAudioFile = audioFile;
-              DecodeCb = cb;
-              return DecodeAudioFile;
-              return DecodeCb;
-      }
-      _decodeAudioDataBefore();
-      /*var _decodeAudioData = function(){
+      console.log(url, '>>>>url>>>');
+      //var DecodeAudioFile, DecodeCb;
+      //var str = typeof(audioFile);
+      //console.log(str, '>>>>str>>>');
 
-      }*/
-      audioContext.decodeAudioData(
-          DecodeAudioFile,
-          //success callback
-          function(buffer) {
-              if (!buffer) {
-                  alert('error decoding file data: ' + url);
-                  return;
-              }
-              DecodeCb(buffer);
-          },
-          //error callback
-          function(error) {
-              alert('decodeAudioData error', error);
-          }
-      );
+
       //XMLHttpRequestとして取得
       var _requestFile = function(cb){
           var _xhr = new XMLHttpRequest();
           _xhr.open("GET", url, true);
+          console.log(url,'>>>url>>>>');
           _xhr.responseType = "arraybuffer";
           _xhr.onload = function(){
               cb(_xhr.response);
+              arrayBuffer = _xhr.response;
           };
+
           _xhr.send();
+          $('.audioPlayer__status').find('.status').text('NowLoading');
       }
       return new Promise(function(resolve, reject){
           _requestFile(function(response){
@@ -60,7 +39,33 @@ $(document).ready(function () {
               });
           });
       });
+
   }
+  var _decodeAudioData = function(arrayBuffer, cb){
+          //AudioContext.decodeAudioData
+          console.log(AudioContext, '>>>>AudioContext>>>>');
+          console.log(audioContext, '>>>>audioContext>>>>');
+          //console.log(audioFile, '>>>>audioFile>>>>');
+          //.decodeAudioData
+          console.log(arrayBuffer, '>>>arrayBuffer>>>>');
+          //console.log(_xhr.response, '_xhr.response');
+
+          audioContext.decodeAudioData(
+              arrayBuffer,
+              //success callback
+              function(buffer) {
+                  if (!buffer) {
+                      alert('error decoding file data: ' + url);
+                      return;
+                  }
+                  cb(buffer);
+              },
+              //error callback
+              function(error) {
+                  alert('decodeAudioData error', error);
+              }
+          );
+    }
 
 
 

@@ -10,19 +10,11 @@ $(document).ready(function () {
   var audioHelper = new AudioHelper(audioContext);
   var arrayBuffer;
   audioHelper.loadAudioBuffer = function(audioContext, url){
-      console.log(AudioContext.decodeAudioData, '>>>AudioContext.decodeAudioData>>>');
-      console.log(audioContext.decodeAudioData, '>>>audioContext.decodeAudioData>>>');
-      console.log(url, '>>>>url>>>');
-      //var DecodeAudioFile, DecodeCb;
-      //var str = typeof(audioFile);
-      //console.log(str, '>>>>str>>>');
-
 
       //XMLHttpRequestとして取得
       var _requestFile = function(cb){
           var _xhr = new XMLHttpRequest();
           _xhr.open("GET", url, true);
-          console.log(url,'>>>url>>>>');
           _xhr.responseType = "arraybuffer";
           _xhr.onload = function(){
               cb(_xhr.response);
@@ -42,14 +34,6 @@ $(document).ready(function () {
 
   }
   var _decodeAudioData = function(arrayBuffer, cb){
-          //AudioContext.decodeAudioData
-          console.log(AudioContext, '>>>>AudioContext>>>>');
-          console.log(audioContext, '>>>>audioContext>>>>');
-          //console.log(audioFile, '>>>>audioFile>>>>');
-          //.decodeAudioData
-          console.log(arrayBuffer, '>>>arrayBuffer>>>>');
-          //console.log(_xhr.response, '_xhr.response');
-
           audioContext.decodeAudioData(
               arrayBuffer,
               //success callback
@@ -78,9 +62,7 @@ $(document).ready(function () {
   //エレメントとトリガー定義
   var el = new function(){
       var o = this;
-      console.log(o, '>>>this>>');
       o.player = document.querySelector('.audioPlayer');
-      console.log(o.player, 'o.player');
       o.music = o.player.querySelector('.music');
       o.play = o.player.querySelector('.play');
       o.stop = o.player.querySelector('.stop');
@@ -127,21 +109,15 @@ $(document).ready(function () {
           el.status.textContent = 'now loading...';
           return new Promise(function(resolve){
               var key = el.music.options[el.music.selectedIndex].textContent;
-              console.log(key, '>>>key>>>');
               var url = el.music.value;
-              console.log(url, '>>>>>url>>>>');
-              console.log(audioHelper.loadAudioBuffer,'>>>>audioHelper.loadAudioBuffer>>>');
               return audioHelper.loadAudioBuffer(key, url).then(function(buffer){
                   el.status.textContent = 'music loaded !';
                   selectionAudio.buffer = buffer;
                   resolve();
               });
           })
-          console.log(audioHelper.loadAudioBuffer,'>>>>audioHelper.loadAudioBuffer>>>');
       }
-      //console.log(audioHelper.loadAudioBuffer,'>>>>audioHelper.loadAudioBuffer>>>');
   }
-  console.log(audioHelper.loadAudioBuffer,'>>>>audioHelper.loadAudioBuffer>>>');
 
   //接続
   gainNode.connect(audioContext.destination);
